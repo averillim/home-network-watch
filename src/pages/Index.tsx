@@ -1,16 +1,52 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import SummaryBar from "@/components/SummaryBar";
+import HostsTable from "@/components/HostsTable";
+import TrafficChart from "@/components/TrafficChart";
+import AlertsPanel from "@/components/AlertsPanel";
+import { useNetworkData } from "@/hooks/useNetworkData";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+export default function Index() {
+  const { summary, hosts, protocols, alerts, loading, countdown, refresh } =
+    useNetworkData();
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card px-6 py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-foreground">
+              🛡️ Friendly Network Monitor
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              A simple view of what's happening on your network
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              Refreshing in {countdown}s
+            </span>
+            <Button variant="outline" size="sm" onClick={refresh} disabled={loading}>
+              <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+              Refresh
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main content */}
+      <main className="mx-auto max-w-7xl space-y-6 p-6">
+        <SummaryBar data={summary} loading={loading} />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <HostsTable hosts={hosts} loading={loading} />
+          <div className="space-y-6">
+            <TrafficChart protocols={protocols} loading={loading} />
+            <AlertsPanel alerts={alerts} loading={loading} />
+          </div>
+        </div>
+      </main>
     </div>
   );
-};
-
-const Index = PlaceholderIndex;
-
-export default Index;
+}
