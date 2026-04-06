@@ -39,17 +39,17 @@ export async function fetchSummary(): Promise<NetworkSummary> {
 
 export async function fetchHosts(): Promise<HostEntry[]> {
   const { data } = await apiClient.get("/hosts");
-  return data;
+  return Array.isArray(data) ? data : [];
 }
 
 export async function fetchProtocols(): Promise<ProtocolBreakdown[]> {
   const { data } = await apiClient.get("/protocols");
-  return data;
+  return Array.isArray(data) ? data : [];
 }
 
 export async function fetchAlerts(): Promise<AlertEntry[]> {
   const { data } = await apiClient.get("/alerts");
-  return data;
+  return Array.isArray(data) ? data : [];
 }
 
 export default apiClient;
