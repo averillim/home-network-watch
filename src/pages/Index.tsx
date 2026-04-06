@@ -12,21 +12,14 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card px-6 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-foreground">
-              🛡️ Friendly Network Monitor
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              A simple view of what's happening on your network
-            </p>
+            <h1 className="text-lg font-bold text-foreground">Dashboard</h1>
+            <p className="text-xs text-muted-foreground">Network overview at a glance</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              Refreshing in {countdown}s
-            </span>
+            <span className="text-xs text-muted-foreground">Refresh in {countdown}s</span>
             <Button variant="outline" size="sm" onClick={refresh} disabled={loading}>
               <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
               Refresh
@@ -35,7 +28,6 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Main content */}
       <main className="mx-auto max-w-7xl space-y-6 p-6">
         <SummaryBar data={summary} loading={loading} />
 

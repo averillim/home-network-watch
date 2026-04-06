@@ -18,6 +18,13 @@ export interface HostEntry {
   bytes_sent: number;
   bytes_rcvd: number;
   is_local: boolean;
+  mac?: string;
+  os?: string;
+  last_seen?: number;
+  device_type?: string;
+  num_flows?: number;
+  active_flows_as_client?: number;
+  active_flows_as_server?: number;
 }
 
 export interface ProtocolBreakdown {
@@ -39,6 +46,11 @@ export async function fetchSummary(): Promise<NetworkSummary> {
 
 export async function fetchHosts(): Promise<HostEntry[]> {
   const { data } = await apiClient.get("/hosts");
+  return Array.isArray(data) ? data : [];
+}
+
+export async function fetchSubnetHosts(subnet: string): Promise<HostEntry[]> {
+  const { data } = await apiClient.get("/hosts", { params: { subnet } });
   return Array.isArray(data) ? data : [];
 }
 
