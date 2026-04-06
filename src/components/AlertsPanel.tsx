@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { AlertEntry } from "@/api/client";
 
@@ -21,38 +20,36 @@ const severityLabel: Record<string, string> = {
 
 export default function AlertsPanel({ alerts, loading }: AlertsPanelProps) {
   return (
-    <Card className="border-none shadow-md">
-      <CardHeader>
-        <CardTitle className="text-lg">Security Alerts</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="rounded-lg border bg-card shadow-sm">
+      <div className="border-b px-4 py-3">
+        <h3 className="text-sm font-semibold text-card-foreground">Security Alerts</h3>
+      </div>
+      <div className="p-4">
         {loading ? (
-          <p className="py-8 text-center text-muted-foreground">Loading…</p>
+          <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
         ) : alerts.length === 0 ? (
-          <p className="py-8 text-center text-muted-foreground">
-            No alerts right now — everything looks good! 🎉
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            No alerts — everything looks good ✓
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {alerts.map((alert) => (
               <li
                 key={alert.id}
-                className="flex items-start gap-3 rounded-lg bg-muted/50 p-3"
+                className="flex items-start gap-3 rounded-md bg-muted/50 p-3"
               >
-                <Badge variant={severityVariant[alert.severity] ?? "default"}>
+                <Badge variant={severityVariant[alert.severity] ?? "default"} className="mt-0.5 text-[10px]">
                   {severityLabel[alert.severity] ?? alert.severity}
                 </Badge>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-foreground">{alert.message}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {alert.timestamp}
-                  </p>
+                  <p className="text-sm text-card-foreground">{alert.message}</p>
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">{alert.timestamp}</p>
                 </div>
               </li>
             ))}
           </ul>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -1,56 +1,48 @@
-import { Wifi, Monitor, Activity, ShieldAlert } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Wifi, Monitor, Activity, ShieldAlert, type LucideIcon } from "lucide-react";
 import type { NetworkSummary } from "@/api/client";
+
+interface StatCardProps {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  accent?: string;
+}
+
+function StatCard({ label, value, icon: Icon, accent }: StatCardProps) {
+  return (
+    <div className="rounded-lg border bg-card p-4 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <Icon className={`h-4 w-4 ${accent ?? "text-muted-foreground/60"}`} />
+      </div>
+      <p className="mt-2 text-2xl font-bold tracking-tight text-card-foreground">{value}</p>
+    </div>
+  );
+}
+
+const statCards = [
+  { key: "num_hosts" as const, label: "Devices", icon: Monitor, format: (v: number) => String(v), accent: "text-primary" },
+  { key: "throughput_bps" as const, label: "Throughput", icon: Wifi, format: (v: number) => `${(v / 1_000_000).toFixed(1)} Mbps`, accent: "text-accent" },
+  { key: "num_flows" as const, label: "Active Flows", icon: Activity, format: (v: number) => String(v), accent: "text-success" },
+  { key: "engaged_alerts" as const, label: "Alerts", icon: ShieldAlert, format: (v: number) => String(v), accent: "text-destructive" },
+];
 
 interface SummaryBarProps {
   data: NetworkSummary | null;
   loading: boolean;
 }
 
-const statCards = [
-  {
-    key: "num_hosts" as const,
-    label: "Devices on your network",
-    icon: Monitor,
-    format: (v: number) => String(v),
-  },
-  {
-    key: "throughput_bps" as const,
-    label: "Network speed",
-    icon: Wifi,
-    format: (v: number) => `${(v / 1_000_000).toFixed(1)} Mbps`,
-  },
-  {
-    key: "num_flows" as const,
-    label: "Active connections",
-    icon: Activity,
-    format: (v: number) => String(v),
-  },
-  {
-    key: "engaged_alerts" as const,
-    label: "Security alerts",
-    icon: ShieldAlert,
-    format: (v: number) => String(v),
-  },
-];
-
 export default function SummaryBar({ data, loading }: SummaryBarProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {statCards.map(({ key, label, icon: Icon, format }) => (
-        <Card key={key} className="border-none shadow-md">
-          <CardContent className="flex items-center gap-4 p-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-              <Icon className="h-6 w-6 text-primary" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">{label}</p>
-              <p className="text-2xl font-bold text-foreground">
-                {loading || !data ? "—" : format(data[key])}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {statCards.map(({ key, label, icon, format, accent }) => (
+        <StatCard
+          key={key}
+          label={label}
+          value={loading || !data ? "—" : format(data[key])}
+          icon={icon}
+          accent={accent}
+        />
       ))}
     </div>
   );
